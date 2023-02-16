@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+{% load static %}
+<head>
+	<meta charset="UTF-8">
+	<title>店情報記入画面|テイクアウト宮崎</title>
+	<link rel="stylesheet" type="text/css" href="{% static  'info_edit/style.css' %}">
+	<link rel="stylesheet" type="text/css" href="../../static/info_edit/style.css"/>
+</head>
+<body>
+<h1>店情報記入画面</h1>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<form action="{% url 'info_edit:edit_main_info'  restaurant_id %}" method="post">
+	{% csrf_token %}
+	<div>
+		<div class="restaurant_data_base">
+			<label>店名
+				<textarea name="" rows="1" cols="30"></textarea>
+			</label>
+		</div>
+	{{ form.errors.restauranta_name_text }}
+	<label>{{ form.restaurant_name_text.label }}{{ form.restaurant_name_text }}</label>
+		<div class="restaurant_data_base">
+			<label>ジャンル
+				<select>
+
+				</select>
+			</label>
+		</div>
+		<div class="restaurant_data_base">
+			<label>市町村
+				<select>
+					<option value="jap">宮崎市</option>
+					<option value="jap">和食</option>
+					<option value="jap">和食</option>
+					<option value="jap">和食</option>
+					<option value="jap">和食</option>
+				</select>
+			</label>
+		</div>
+		<div class="restaurant_data_base">
+			<label>住所
+				<textarea name="" rows="1" cols="30"></textarea>
+			</label>
+		</div>
+		<div class="restaurant_data_base">
+			<label>電話番号
+				<textarea name="" rows="1" cols="30"></textarea>
+			</label>
+		</div>
+		<div class="restaurant_data_base">
+			<label>email
+				<textarea name="" rows="1" cols="30"></textarea>
+			</label>
+		</div>
+		<div class="restaurant_data_base">
+			<label>webサイト
+				<textarea name="" rows="1" cols="30"></textarea>
+			</label>
+		</div>
+		<div class="restaurant_data_base">
+			<label>営業時間
+				<textarea name="" rows="1" cols="30"></textarea>
+			</label>
+		</div>
+		<div class="restaurant_data_base">
+			<label>テイクアウトの形態
+				<select>
+					<option value="jap">持ち帰りのみ</option>
+					<option value="jap">宅配可</option>
+					<option value="jap">和食</option>
+					<option value="jap">和食</option>
+					<option value="jap">和食</option>
+				</select>
+			</label>
+		</div>
+		<div class="restaurant_data_base">
+			<label>コメント
+				<textarea name="" rows="1" cols="30"></textarea>
+			</label>
+		</div>
+		<div class="restaurant_data_base">
+			<label>店舗画像アップロード
+				<textarea name="" rows="1" cols="30"></textarea>
+			</label>
+		</div>
+		<div class="restaurant_data_base">
+			<label>保存
+				<input type="submit" value="save"></label>
+		</div>
+	</div>
+</form>
+</body>
+</html>

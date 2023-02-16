@@ -1,0 +1,47 @@
+{% extends "register/base.html" %}
+{% block content %}
+	<table class="table">
+		<tbody>
+		<tr>
+			<th>email</th>
+			<td>{{ user.email }}</td>
+		</tr>
+		<tr>
+			<th>編集担当者氏名</th>
+			<td>{{ user.get_full_name }}</td>
+		</tr>
+		<tr>
+			<th>店舗名</th>
+			<td>{{ restaurant.restaurant_name_text }}</td>
+		</tr>
+		<tr>
+			<th>所在地</th>
+			<td>{{ restaurant.restaurant_address }}</td>
+		</tr>
+		<tr>
+			<th>市区町村</th>
+			<td>{{ restaurant.restaurant_city }}</td>
+		</tr>
+		<tr>
+			<th>エリア</th>
+			<td>{% for area in restaurant.city_area.all %}
+				{{ area }}
+			{% endfor %}</td>
+		</tr>
+		<tr>
+			<th>情報更新日時</th>
+			<td>{{ restaurant.mod_date }}</td>
+		</tr>
+		<tr>
+			<th>ジャンル</th>
+			<td>{% for genre in restaurant.restaurant_genre.all %}
+				{{ genre }}
+			{% endfor %}</td>
+		</tr>
+		<tr>
+			<th>コメント</th>
+			<td>{{ restaurant.restaurant_comment }}</td>
+		</tr>
+		</tbody>
+	</table>
+{% endblock %}

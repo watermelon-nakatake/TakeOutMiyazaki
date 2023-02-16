@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+{% load static %}
+<head>
+	<meta charset="UTF-8">
+	<title>{{ this_restaurant.restaurant_name_text }}店舗情報|テイクアウト宮崎</title>
+	<link rel="stylesheet" type="text/css" href="{% static  'info_edit/style.css' %}"/>
+</head>
+<body>
+<h1>店名</h1>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<section id="basic_info">
+	<div id="detail_img"><img src="{% static  'info_edit/pizza-1209748_1280.jpg' %}" alt="店名画像"></div>
+	<dl>
+		<dt>店名</dt>
+		<dd>{{ this_restaurant.restaurant_name_text }}</dd>
+		<dt>ジャンル</dt>
+		<dd>{% for genre in this_restaurant.restaurant_genre.all %}{{ genre }} {% endfor %}</dd>
+		<dt>所在地</dt>
+		<dd>{{ this_restaurant.restaurant_address }}</dd>
+		<dt>電話番号</dt>
+		<dd>0984-99-9999</dd>
+		<dt>e-mail</dt>
+		<dd>ggg@ggg.com</dd>
+		<dt>webサイト</dt>
+		<dd>https://gggg.com</dd>
+		<dt>営業時間</dt>
+		<dd>11:00~22:00</dd>
+		<dt>テイクアウト形態</dt>
+		<dd>配達可</dd>
+		<dt>コメント</dt>
+		<dd>{{ this_restaurant.restaurant_comment }}</dd>
+	</dl>
+
+	{% for img in image_list %}
+		<li><img src="{{ img.image.large.url }}" alt="店画像">
+		</li>
+	{% endfor %}
+
+</section>
+<section id="menu_list">
+	<ul class="menu_list_outer">
+
+		{% for menu in menu_list %}
+			<li>
+				{% for menu_image in menu.images %}
+					<img src="{{ menu_image.image.url }}" alt="料理画像">
+				{% endfor %}
+
+				<ul class=" menu_list_inner">
+					<li>{{ menu.name_text }}</li>
+					<li>{{ menu.price }}円</li>
+					<li>{{ menu.comment_text }}</li>
+				</ul>
+			</li>
+		{% endfor %}
+	</ul>
+</section>
+<section id="search_box">
+	<h2>検索</h2>
+	<form action="" method="post">
+		<div>
+			<p>エリア検索</p>
+			<label>市町村
+				<select name="city">
+					<option value="">宮崎市</option>
+					<option value="">都城市</option>
+					<option value="">小林市</option>
+				</select>
+			</label>
+			<label>エリア
+				<select name="area">
+					<option value="">北部</option>
+					<option value="">東部</option>
+					<option value="">西部</option>
+					<option value="">南部</option>
+				</select>
+			</label>
+
+			<label>ジャンル
+				<select name="genre">
+					<option value="">北部</option>
+					<option value="">東部</option>
+					<option value="">西部</option>
+					<option value="">南部</option>
+				</select>
+			</label>
+			<label>営業時間
+				<select name="time">
+					<option value="">ランチ</option>
+					<option value="">ディナー</option>
+					<option value="">その他</option>
+				</select>
+			</label>
+			<label>価格帯
+				<select name="price">
+					<option value="">~500円</option>
+					<option value="">500~1000円</option>
+					<option value="">1000~1500円</option>
+					<option value="">2000円~</option>
+				</select>
+			</label>
+			<input type="submit" value="検索">
+		</div>
+	</form>
+</section>
+</body>
+</html>

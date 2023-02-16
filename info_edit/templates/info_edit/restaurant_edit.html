@@ -1,0 +1,10 @@
+{% extends "register/base.html" %}
+{% block content %}
+<form action="" method="POST">
+{{ user_form.as_p }}
+<hr>
+{{ restaurant_form.as_p }}
+{% csrf_token %}
+<input type="submit" value="送信">
+</form>
+{% endblock %}

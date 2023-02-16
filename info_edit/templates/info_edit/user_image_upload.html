@@ -1,0 +1,8 @@
+<h1>Please Upload</h1>
+
+<form enctype="multipart/form-data" action="{% url 'info_edit:user_image_upload' %}" method="post">
+{% csrf_token %}
+	{{ restaurant.restaurant_name_text }}の画像追加
+{{form.as_p}}
+<input type="submit" value="Upload">
+</form>
