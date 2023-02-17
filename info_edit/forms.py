@@ -1,4 +1,4 @@
-from .models import Restaurant, CityName, RestaurantImage
+from .models import Restaurant, CityName, RestaurantImage, RestaurantMenu
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from register.models import User
@@ -54,6 +54,7 @@ class RestaurantCreateForm(forms.ModelForm):
 class UserEditForm(UserChangeForm):
     password = None
     """レストラン情報ページ用ユーザーフォーム"""
+
     class Meta:
         model = User
         fields = ('last_name', 'first_name')
@@ -63,3 +64,29 @@ class RestaurantImageForm(forms.ModelForm):
     class Meta:
         model = RestaurantImage
         fields = ['image', 'title']
+
+
+class MenuEditForm(forms.ModelForm):
+    """料理情報更新ページ用ユーザーフォーム"""
+
+    class Meta:
+        model = RestaurantMenu
+        exclude = ('user', 'pub_date', 'mod_date', 'image_num')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+
+class MenuCreateForm(forms.ModelForm):
+    """料理情報新規作成フォーム"""
+
+    class Meta:
+        model = RestaurantMenu
+        exclude = ('user', 'pub_date', 'mod_date', 'image_num')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'

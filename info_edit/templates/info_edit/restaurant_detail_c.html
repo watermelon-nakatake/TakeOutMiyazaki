@@ -3,38 +3,30 @@
 	<table class="table">
 		<tbody>
 		<tr>
-			<th>email</th>
-			<td>{{ user.email }}</td>
-		</tr>
-		<tr>
-			<th>編集担当者氏名</th>
-			<td>{{ user.get_full_name }}</td>
-		</tr>
-		<tr>
 			<th>店舗名</th>
-			<td>{{ restaurant.restaurant_name_text }}</td>
+			<td>{{ restaurant_detail.restaurant_name_text }}</td>
 		</tr>
 		<tr>
 			<th>所在地</th>
-			<td>{{ restaurant.restaurant_address }}</td>
+			<td>{{ restaurant_detail.restaurant_address }}</td>
 		</tr>
 		<tr>
 			<th>市区町村</th>
-			<td>{{ restaurant.restaurant_city }}</td>
+			<td>{{ restaurant_detail.restaurant_city }}</td>
 		</tr>
 		<tr>
 			<th>エリア</th>
-			<td>{% for area in restaurant.city_area.all %}
+			<td>{% for area in restaurant_detail.city_area.all %}
 				{{ area }}
 			{% endfor %}</td>
 		</tr>
 		<tr>
 			<th>情報更新日時</th>
-			<td>{{ restaurant.mod_date }}</td>
+			<td>{{ restaurant_detail.mod_date }}</td>
 		</tr>
 		<tr>
 			<th>ジャンル</th>
-			<td>{% for genre in restaurant.restaurant_genre.all %}
+			<td>{% for genre in restaurant_detail.restaurant_genre.all %}
 				{{ genre }}
 			{% endfor %}</td>
 		</tr>
@@ -47,8 +39,8 @@
     <a href="{% url 'info_edit:user_edit_main' %}">店情報変更</a>
     <a href="{% url 'info_edit:menu_create' %}">メニュー追加</a>
     <ul>
-    {% for menu in menu_list.all %}
-        <li><span>{{ menu.menu_name_text }}</span><span><a href="{% url 'info_edit:menu_edit' menu_id %}">情報変更</a></span></li>
+    {% for menu in restaurant_detail.Menu.all %}
+        <li><span>{{ menu.menu_name_text }}</span><span><a href="">情報変更</a></span></li>
     {% endfor %}
 
     </ul>

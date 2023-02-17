@@ -1,0 +1,55 @@
+{% extends "register/base.html" %}
+{% block content %}
+<h1>検索|テイクアウト宮崎</h1>
+<section id="search_box">
+	<h2>検索</h2>
+	<form action="" method="post">
+		<div>
+			<p>エリア検索</p>
+			<label>市町村
+				<select name="city">
+					<option value="">宮崎市</option>
+					<option value="">都城市</option>
+					<option value="">小林市</option>
+				</select>
+			</label>
+			<label>エリア
+				<select name="area">
+					<option value="">北部</option>
+					<option value="">東部</option>
+					<option value="">西部</option>
+					<option value="">南部</option>
+				</select>
+			</label>
+
+			<label>ジャンル
+				<select name="genre">
+					<option value="">北部</option>
+					<option value="">東部</option>
+					<option value="">西部</option>
+					<option value="">南部</option>
+				</select>
+			</label>
+			<label>営業時間
+				<select name="time">
+					<option value="">ランチ</option>
+					<option value="">ディナー</option>
+					<option value="">その他</option>
+				</select>
+			</label>
+			<label>価格帯
+				<select name="price">
+					<option value="">~500円</option>
+					<option value="">500~1000円</option>
+					<option value="">1000~1500円</option>
+					<option value="">2000円~</option>
+				</select>
+			</label>
+			<input type="submit" value="検索">
+		</div>
+	</form>
+</section>
+<div>
+	<p>こちらに掲載したい飲食店様は、こちらからログインしてご記入ください。</p>
+
+{% endblock %}

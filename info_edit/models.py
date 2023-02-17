@@ -9,19 +9,20 @@ class RestaurantStaff(models.Model):
     user = models
 
 
-class CityName(models.Model):
-    city_name_text = models.CharField('市区町村', max_length=10)
-
-    def __str__(self):
-        return self.city_name_text
-
-
 class CityArea(models.Model):
-    city_name = models.ForeignKey(CityName, on_delete=models.CASCADE)
+
     area_name_text = models.CharField(max_length=10)
 
     def __str__(self):
         return self.area_name_text
+
+
+class CityName(models.Model):
+    city_area = models.ForeignKey(CityArea, on_delete=models.CASCADE, default=1)
+    city_name_text = models.CharField('市区町村', max_length=10)
+
+    def __str__(self):
+        return self.city_name_text
 
 
 class Genre(models.Model):
@@ -42,17 +43,19 @@ class Restaurant(models.Model):
     restaurant_genre = models.ManyToManyField(Genre, verbose_name='ジャンル')
     restaurant_comment = models.CharField('コメント', max_length=300, blank=True)
     image_num = models.IntegerField(default=0)
+    max_menu_id = models.IntegerField(default=0)
 
     def __str__(self):
         return self.restaurant_name_text
 
 
 class RestaurantMenu(models.Model):
-    sub_restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    sub_restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='Menu')
     menu_name_text = models.CharField('料理名', max_length=100)
     menu_comment_text = models.CharField('コメント', max_length=300)
     menu_price = models.IntegerField('価格', default=0, blank=True)
     image_num = models.IntegerField(default=0)
+    menu_id = models.IntegerField('料理ID', default=0)
 
     def __str__(self):
         return self.menu_name_text
@@ -77,12 +80,12 @@ def make_menu_upload_path(instance, file_name):
 class RestaurantImage(models.Model):
     image = StdImageField(upload_to=make_upload_path, blank=True, null=True,
                           variations={'large': (600, 400), 'thumbnail': (150, 100)})
-    sub_restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
+    sub_restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='RestaurantImage')
     title = models.CharField(max_length=20, blank=True)
 
 
 class MenuImage(models.Model):
     image = StdImageField(upload_to=make_menu_upload_path, blank=True, null=True,
                           variations={'large': (600, 400), 'thumbnail': (150, 100)})
-    sub_menu = models.ForeignKey(RestaurantMenu, on_delete=models.CASCADE)
+    sub_menu = models.ForeignKey(RestaurantMenu, on_delete=models.CASCADE, related_name='MenuImage')
     title = models.CharField(max_length=20, blank=True)
