@@ -85,7 +85,7 @@ class UserCreateComplete(generic.TemplateView):
         # tokenは問題なし
         else:
             try:
-                user = User.objects.get(pk=user_pk)
+                user = User.objects.get()
             except User.DoesNotExist:
                 return HttpResponseBadRequest()
             else:

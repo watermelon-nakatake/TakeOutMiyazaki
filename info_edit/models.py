@@ -10,7 +10,6 @@ class RestaurantStaff(models.Model):
 
 
 class CityArea(models.Model):
-
     area_name_text = models.CharField(max_length=10)
 
     def __str__(self):
@@ -18,7 +17,7 @@ class CityArea(models.Model):
 
 
 class CityName(models.Model):
-    city_area = models.ForeignKey(CityArea, on_delete=models.CASCADE, default=1)
+    city_area = models.ForeignKey(CityArea, on_delete=models.CASCADE, default=1, related_name='area')
     city_name_text = models.CharField('市区町村', max_length=10)
 
     def __str__(self):
@@ -33,13 +32,10 @@ class Genre(models.Model):
 
 
 class Restaurant(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     restaurant_name_text = models.CharField('店名', max_length=20)
-    pub_date = models.DateTimeField('作成日時', auto_now_add=True)
-    mod_date = models.DateTimeField('更新日時', auto_now=True)
     restaurant_address = models.CharField('所在地', max_length=200)
     restaurant_city = models.ForeignKey(CityName, on_delete=models.CASCADE, verbose_name='市区町村')
-    city_area = models.ManyToManyField(CityArea, verbose_name='エリア')
     restaurant_genre = models.ManyToManyField(Genre, verbose_name='ジャンル')
     restaurant_comment = models.CharField('コメント', max_length=300, blank=True)
     image_num = models.IntegerField(default=0)
@@ -55,7 +51,7 @@ class RestaurantMenu(models.Model):
     menu_comment_text = models.CharField('コメント', max_length=300)
     menu_price = models.IntegerField('価格', default=0, blank=True)
     image_num = models.IntegerField(default=0)
-    menu_id = models.IntegerField('料理ID', default=0)
+    menu_id = models.IntegerField('料理ID', default=0)  # そのレストラン内のID
 
     def __str__(self):
         return self.menu_name_text

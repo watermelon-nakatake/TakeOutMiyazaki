@@ -121,7 +121,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/'
 
 LOGIN_URL = 'register:login'
-LOGIN_REDIRECT_URL = 'info_edit:user_top'
+LOGIN_REDIRECT_URL = 'info_edit:user_detail'
 
 AUTH_USER_MODEL = 'register.User'
 

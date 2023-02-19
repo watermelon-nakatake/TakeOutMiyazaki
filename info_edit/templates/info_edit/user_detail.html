@@ -3,14 +3,6 @@
 	<table class="table">
 		<tbody>
 		<tr>
-			<th>email</th>
-			<td>{{ user.email }}</td>
-		</tr>
-		<tr>
-			<th>編集担当者氏名</th>
-			<td>{{ user.get_full_name }}</td>
-		</tr>
-		<tr>
 			<th>店舗名</th>
 			<td>{{ restaurant.restaurant_name_text }}</td>
 		</tr>
@@ -24,14 +16,12 @@
 		</tr>
 		<tr>
 			<th>エリア</th>
-			<td>{% for area in restaurant.city_area.all %}
+			<td>
+            {% for area in restaurant.restaurant_city.city_area.all %}
 				{{ area }}
 			{% endfor %}</td>
 		</tr>
-		<tr>
-			<th>情報更新日時</th>
-			<td>{{ restaurant.mod_date }}</td>
-		</tr>
+
 		<tr>
 			<th>ジャンル</th>
 			<td>{% for genre in restaurant.restaurant_genre.all %}
@@ -48,7 +38,7 @@
     <a href="{% url 'info_edit:menu_create' %}">メニュー追加</a>
     <ul>
     {% for menu in menu_list.all %}
-        <li><span>{{ menu.menu_name_text }}</span><span><a href="{% url 'info_edit:menu_edit' menu_id %}">情報変更</a></span></li>
+        <li><span>{{ menu.menu_name_text }}</span><span><a href="{% url 'info_edit:menu_edit' menu.pk %}">情報変更</a></span></li>
     {% endfor %}
 
     </ul>

@@ -71,7 +71,7 @@ class MenuEditForm(forms.ModelForm):
 
     class Meta:
         model = RestaurantMenu
-        exclude = ('user', 'pub_date', 'mod_date', 'image_num')
+        exclude = ('user', 'pub_date', 'mod_date', 'image_num', 'menu_id', 'sub_restaurant')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -84,9 +84,15 @@ class MenuCreateForm(forms.ModelForm):
 
     class Meta:
         model = RestaurantMenu
-        exclude = ('user', 'pub_date', 'mod_date', 'image_num')
+        exclude = ('user', 'pub_date', 'mod_date', 'image_num', 'menu_id', 'sub_restaurant')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+
+
+class MenuCreateForm2(forms.Form):
+    def __init__(self, *args, **kwargs):
+        self.sub_restaurant = kwargs.pop('sub_restaurant')
+        super(MenuCreateForm2, self).__init__(*args, **kwargs)
