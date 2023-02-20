@@ -1,0 +1,10 @@
+{% extends "register/base.html" %}
+
+{% block content_block %}
+<h1>店舗画像の削除</h1>
+<form method="post">
+  {% csrf_token %}
+  <input type="submit" class="btn btn-danger" value="削除">
+  <a href="{% url 'App:detail' pk=company.pk %} ">キャンセル</a>
+</form>
+{% endblock %}

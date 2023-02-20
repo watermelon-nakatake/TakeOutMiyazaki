@@ -15,6 +15,8 @@ urlpatterns = [
     path('user/edit_main/', views.restaurant_edit, name='user_edit_main'),
     # レストラン用画像のアップロード
     path('user/image_upload/', views.RestaurantImageUploadView.as_view(), name='user_image_upload'),
+    # レストラン用画像の削除
+    path('user/image_delete/<int:r_img_pk>/', views.RestaurantImageDeleteView.as_view(), name='user_image_delete'),
 
     # メニュー新規作成
     path('user/menu_create/', views.menu_create, name='menu_create', ),

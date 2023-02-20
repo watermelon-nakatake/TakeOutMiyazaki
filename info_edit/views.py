@@ -244,33 +244,6 @@ class MenuUpdateView(LoginRequiredMixin, generic.UpdateView):
     login_url = 'user/top/'
 
 
-class MyImageUploadView(generic.CreateView):
-
-    def form_valid(self, form):
-        save_path = "up_images/temporary/" + str(self.request.FILES['image'])
-        up_data = self.request.FILES['image']
-        with open(save_path, 'wb+') as i:
-            for chunk in up_data.chunks():
-                i.write(chunk)
-        # サイズ調整
-        img = Image.open(save_path)
-        if img.size[0] / 4 * 3 >= img.size[1]:
-            re_img = img.resize((640, int(640 * img.size[1] / img.size[0])))
-        else:
-            re_img = img.resize((int(480 * img.size[0] / img.size[1]), 480))
-        # I/Oデータ取り出し
-        img_io = io.BytesIO()
-        re_img.save(img_io, format="JPEG")
-        io_image = InMemoryUploadedFile(img_io, field_name=None, name=save_path, charset=None,
-                                        content_type="image/jpeg", size=img_io.getbuffer().nbytes)
-        post = form.save(commit=False)
-        post.picture = io_image
-        post.sub_restaurant = Restaurant.objects.get(user=self.request.user)
-        post.save()
-        os.remove(save_path)
-        return super().form_valid(form)
-
-
 class RestaurantImageUploadView(LoginRequiredMixin, generic.CreateView):
     model = RestaurantImage
     template_name = 'info_edit/restaurant_image_upload.html'
@@ -303,9 +276,42 @@ class RestaurantImageUploadView(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-
-class MenuImageUploadView(LoginRequiredMixin, MyImageUploadView):
+class MenuImageUploadView(LoginRequiredMixin, generic.CreateView):
     model = MenuImage
     template_name = 'info_edit/menu_image_upload.html'
     fields = ('title', 'image')
+
+    def form_valid(self, form):
+        save_path = "up_images/temporary/" + str(self.request.FILES['image'])
+        up_data = self.request.FILES['image']
+        with open(save_path, 'wb+') as i:
+            for chunk in up_data.chunks():
+                i.write(chunk)
+        # サイズ調整
+        img = Image.open(save_path)
+        if img.size[0] / 4 * 3 >= img.size[1]:
+            re_img = img.resize((640, int(640 * img.size[1] / img.size[0])))
+        else:
+            re_img = img.resize((int(480 * img.size[0] / img.size[1]), 480))
+        # I/Oデータ取り出し
+        img_io = io.BytesIO()
+        re_img.save(img_io, format="JPEG")
+        io_image = InMemoryUploadedFile(img_io, field_name=None, name=save_path, charset=None,
+                                        content_type="image/jpeg", size=img_io.getbuffer().nbytes)
+        post = form.save(commit=False)
+        post.picture = io_image
+        post.sub_menu = RestaurantMenu.objects.get(sub_restaurant=Restaurant.objects.get(user=self.request.user))
+        post.save()
+        os.remove(save_path)
+        return super().form_valid(form)
+
+
+class RestaurantImageDeleteView(LoginRequiredMixin, generic.DetailView):
+    model = RestaurantImage
+    template_name = 'info_edit/restaurant_img_delete.html'
+
+    def get(self, request, r_img_pk):
+        image_pk = r_img_pk
+        return render(request, 'info_edit/restaurant_img_delete.html', )
+
 
