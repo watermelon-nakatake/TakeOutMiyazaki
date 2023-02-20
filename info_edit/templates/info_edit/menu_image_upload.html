@@ -1,0 +1,21 @@
+<div>
+    <title>料理画像のアップロード</title>
+
+    <form method="POST" enctype='multipart/form-data'>
+    {% csrf_token %}
+
+    <div>
+
+            タイトル<br>
+            {{ form.title }}<br><br>
+
+            画像<br>
+            {{ form.picture }}<br><br>
+
+            <button class="btn btn-primary" type="submit">アップロード</button>
+
+    </div>
+
+    </form>
+
+</div>

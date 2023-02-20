@@ -32,6 +32,12 @@
 			<th>コメント</th>
 			<td>{{ restaurant.restaurant_comment }}</td>
 		</tr>
+        {% for r_image in restaurant.RestaurantImage.all %}
+            <tr>
+            <th>{{ r_image.title }}</th>
+            <td><img src="/images/{{ r_image.image }}"></td>
+            </tr>
+        {% endfor %}
 		</tbody>
 	</table>
     <a href="{% url 'info_edit:user_edit_main' %}">店情報変更</a>

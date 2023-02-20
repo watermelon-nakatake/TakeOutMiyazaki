@@ -1,4 +1,4 @@
-from .models import Restaurant, CityName, RestaurantImage, RestaurantMenu
+from .models import Restaurant, CityName, RestaurantImage, RestaurantMenu, MenuImage
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from register.models import User
@@ -96,3 +96,9 @@ class MenuCreateForm2(forms.Form):
     def __init__(self, *args, **kwargs):
         self.sub_restaurant = kwargs.pop('sub_restaurant')
         super(MenuCreateForm2, self).__init__(*args, **kwargs)
+
+
+class RestaurantImageUploadForm(forms.ModelForm):
+    class Meta:
+        model = RestaurantImage
+        fields = "__all__"

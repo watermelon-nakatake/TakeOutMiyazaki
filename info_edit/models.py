@@ -74,14 +74,18 @@ def make_menu_upload_path(instance, file_name):
 
 
 class RestaurantImage(models.Model):
-    image = StdImageField(upload_to=make_upload_path, blank=True, null=True,
-                          variations={'large': (600, 400), 'thumbnail': (150, 100)})
+    image = models.ImageField(upload_to='restaurant_img', blank=True, null=True)
     sub_restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='RestaurantImage')
     title = models.CharField(max_length=20, blank=True)
 
+    def __str__(self):
+        return self.title
+
 
 class MenuImage(models.Model):
-    image = StdImageField(upload_to=make_menu_upload_path, blank=True, null=True,
-                          variations={'large': (600, 400), 'thumbnail': (150, 100)})
+    image = models.ImageField(upload_to='menu_img', blank=True, null=True)
     sub_menu = models.ForeignKey(RestaurantMenu, on_delete=models.CASCADE, related_name='MenuImage')
     title = models.CharField(max_length=20, blank=True)
+
+    def __str__(self):
+        return self.title
