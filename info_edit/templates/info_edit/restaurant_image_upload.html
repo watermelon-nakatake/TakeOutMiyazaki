@@ -1,7 +1,7 @@
 {% extends "register/base.html" %}
 
 {% block content %}
-<title>画像アップロード</title>
+<title>店舗画像アップロード</title>
     <form method="POST" enctype="multipart/form-data"
           action="{% url 'info_edit:user_image_upload' %}">
         {% csrf_token %}

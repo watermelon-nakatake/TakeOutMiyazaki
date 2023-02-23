@@ -1,19 +1,12 @@
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, get_list_or_404, render
+from django.shortcuts import get_object_or_404, get_list_or_404, render, redirect, resolve_url
 from .models import RestaurantImage, MenuImage, Restaurant, RestaurantMenu, Genre, CityName, CityArea
-from .forms import MakeRestaurantMain
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.signing import BadSignature, SignatureExpired, loads, dumps
-from django.shortcuts import redirect, resolve_url
-from django.template.loader import render_to_string
 from django.views import generic
-from register.forms import LoginForm, UserCreateForm
+from register.forms import UserCreateForm
 from .forms import RestaurantEditForm, RestaurantCreateForm, UserEditForm, RestaurantImageForm, MenuCreateForm, \
     MenuEditForm, MenuCreateForm2, RestaurantImageUploadForm
 from django import forms
@@ -199,8 +192,8 @@ def menu_edit(request, menu_pk):
     return render(request, 'info_edit/menu_edit.html', context)
 
 
-# 以下クラスビューのテスト
-
+# 以下クラスビューで実装
+# 店舗基本情報のCRUD
 class RestaurantCreateView(LoginRequiredMixin, generic.CreateView):
     model = Restaurant
     fields = ('restaurant_name_text', 'restaurant_address', 'restaurant_city', 'restaurant_genre',
@@ -214,7 +207,7 @@ class RestaurantCreateView(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('info_edit:restaurant_detail', kwargs={'pk': self.object.pk})
+        return reverse('info_edit:restaurant_detail', kwargs={'pk': self.kwargs['pk']})
 
 
 class RestaurantDetailView(LoginRequiredMixin, generic.DetailView):
@@ -223,25 +216,65 @@ class RestaurantDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = 'info_edit/restaurant_detail_c.html'
 
 
+class RestaurantUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Restaurant
+    context_object_name = 'restaurant_detail'
+    fields = ('restaurant_name_text', 'restaurant_address', 'restaurant_city', 'restaurant_genre',
+              'restaurant_comment')
+    template_name = 'info_edit/restaurant_update_c.html'
+
+
+class RestaurantDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Restaurant
+    template_name = 'info_edit/delete.html'
+
+
+# メニュー情報のCRUD
 class MenuCreateView(LoginRequiredMixin, generic.CreateView):
     fields = ('menu_name_text', 'menu_comment_text', 'menu_price')
     model = RestaurantMenu
     template_name = 'info_edit/menu_create_c.html'
-    login_url = 'user/top/'
+    login_url = reverse_lazy('info_edit:user_detail')
+    context_object_name = 'this_menu'
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['this_restaurant'] = Restaurant.objects.get(user=self.request.user)
+        this_pk = self.kwargs.get('r_pk')
+        context = super().get_context_data(**kwargs)
+        context['this_restaurant'] = Restaurant.objects.get(pk=this_pk)
+        return context
+
+    def form_valid(self, form):
+        this_menu = form.save(commit=False)
+        this_menu.sub_restaurant = Restaurant.objects.get(user=self.request.user)
+        this_menu.save()
+        return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('info_edit:restaurant_detail', kwargs={'pk': self.object.pk})
+        return reverse('info_edit:restaurant_detail', kwargs={'pk': self.kwargs['r_pk']})
+
+
+class MenuDetailView(LoginRequiredMixin, generic.DetailView):
+    model = RestaurantMenu
+    context_object_name = 'menu_detail'
+    template_name = 'info_edit/menu_detail_c.html'
 
 
 class MenuUpdateView(LoginRequiredMixin, generic.UpdateView):
     fields = ('menu_name_text', 'menu_comment_text', 'menu_price')
     model = RestaurantMenu
-    template_name = 'info_edit/menu_create_c.html'
-    login_url = 'user/top/'
+    template_name = 'info_edit/menu_update_c.html'
+    login_url = reverse_lazy('info_edit:user_detail')
+
+    def get_context_data(self, **kwargs):
+        this_pk = self.kwargs.get('pk')
+        context = super().get_context_data(**kwargs)
+        context['this_menu'] = RestaurantMenu.objects.get(pk=this_pk)
+        return context
+
+
+class MenuDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Restaurant
+    template_name = 'info_edit/delete.html'
 
 
 class RestaurantImageUploadView(LoginRequiredMixin, generic.CreateView):
@@ -300,7 +333,7 @@ class MenuImageUploadView(LoginRequiredMixin, generic.CreateView):
                                         content_type="image/jpeg", size=img_io.getbuffer().nbytes)
         post = form.save(commit=False)
         post.picture = io_image
-        post.sub_menu = RestaurantMenu.objects.get(sub_restaurant=Restaurant.objects.get(user=self.request.user))
+        post.sub_menu = RestaurantMenu.objects.get(pk=self.kwargs['pk'])
         post.save()
         os.remove(save_path)
         return super().form_valid(form)
@@ -310,8 +343,28 @@ class RestaurantImageDeleteView(LoginRequiredMixin, generic.DetailView):
     model = RestaurantImage
     template_name = 'info_edit/restaurant_img_delete.html'
 
-    def get(self, request, r_img_pk):
-        image_pk = r_img_pk
-        return render(request, 'info_edit/restaurant_img_delete.html', )
+
+class MenuImageDeleteView(LoginRequiredMixin, generic.DetailView):
+    model = MenuImage
+    template_name = 'info_edit/menu_img_delete.html'
 
 
+class ExRestaurantListView(generic.ListView):
+    model = Restaurant
+    context_object_name = 'restaurant_list'
+    template_name = 'info_edit/Ex_restaurant_list.html'
+
+
+class ExRestaurantDetailView(generic.DetailView):
+    model = Restaurant
+    context_object_name = 'restaurant_data'
+    template_name = 'info_edit/Ex_restaurant_detail.html'
+
+
+class ExMenuDetailView(generic.DetailView):
+    model = RestaurantMenu
+    context_object_name = 'menu_data'
+    template_name = 'info_edit/Ex_menu_detail.html'
+
+
+# todo: UserPassesTestMixinクラスでやってみる

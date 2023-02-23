@@ -32,11 +32,11 @@ class Genre(models.Model):
 
 
 class Restaurant(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='Restaurant')
     restaurant_name_text = models.CharField('店名', max_length=20)
     restaurant_address = models.CharField('所在地', max_length=200)
     restaurant_city = models.ForeignKey(CityName, on_delete=models.CASCADE, verbose_name='市区町村')
-    restaurant_genre = models.ManyToManyField(Genre, verbose_name='ジャンル')
+    restaurant_genre = models.ForeignKey(Genre, verbose_name='ジャンル', on_delete=models.CASCADE)
     restaurant_comment = models.CharField('コメント', max_length=300, blank=True)
     image_num = models.IntegerField(default=0)
     max_menu_id = models.IntegerField(default=0)

@@ -1,0 +1,14 @@
+{% extends "register/base.html" %}
+{% block content %}
+
+<h1>削除画面</h1>
+<p>本当に「{{ object }}」を削除しますか？</p>
+<form method="post">
+{% csrf_token %}
+<input type="submit" value="削除する">
+<a href="{% url 'info_edit:restaurant_detail_u' pk=object.pk %}">やっぱりやめる</a>
+</form>
+{% endblock %}
+
+
+

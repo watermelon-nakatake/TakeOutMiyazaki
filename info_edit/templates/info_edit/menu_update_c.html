@@ -1,0 +1,20 @@
+{% extends "info_edit/login_base.html" %}
+{% block content %}
+    <h1>メニュー情報更新画面 {{ this_restaurant.restaurant_name_text }}</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+
+        <input type="submit" value="送信">
+    </form>
+    <h2>この料理の画像一覧</h2>
+    <ul>
+        {% for m_image in this_menu.MenuImage.all %}
+            <li><img src="/images/{{ m_image.image }}" alt="{{ m_image.title }}"></li>
+        {% endfor %}
+    </ul>
+    <p><a href="{% url 'info_edit:menu_image_upload' menu_pk=this_menu.pk %}">画像追加</a></p>
+
+
+{% endblock %}

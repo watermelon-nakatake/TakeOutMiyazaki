@@ -1,47 +1,52 @@
-{% extends "register/base.html" %}
+{% extends "info_edit/login_base.html" %}
 {% block content %}
-	<table class="table">
-		<tbody>
-		<tr>
-			<th>店舗名</th>
-			<td>{{ restaurant_detail.restaurant_name_text }}</td>
-		</tr>
-		<tr>
-			<th>所在地</th>
-			<td>{{ restaurant_detail.restaurant_address }}</td>
-		</tr>
-		<tr>
-			<th>市区町村</th>
-			<td>{{ restaurant_detail.restaurant_city }}</td>
-		</tr>
-		<tr>
-			<th>エリア</th>
-			<td>{% for area in restaurant_detail.city_area.all %}
-				{{ area }}
-			{% endfor %}</td>
-		</tr>
-		<tr>
-			<th>情報更新日時</th>
-			<td>{{ restaurant_detail.mod_date }}</td>
-		</tr>
-		<tr>
-			<th>ジャンル</th>
-			<td>{% for genre in restaurant_detail.restaurant_genre.all %}
-				{{ genre }}
-			{% endfor %}</td>
-		</tr>
-		<tr>
-			<th>コメント</th>
-			<td>{{ restaurant_detail.restaurant_comment }}</td>
-		</tr>
-		</tbody>
-	</table>
-    <a href="{% url 'info_edit:user_edit_main' %}">店情報変更</a>
-    <a href="{% url 'info_edit:menu_create2' r_pk=restaurant_detail.pk %}">メニュー追加</a>
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>店舗名</th>
+            <td>{{ restaurant_detail.restaurant_name_text }}</td>
+        </tr>
+        <tr>
+            <th>所在地</th>
+            <td>{{ restaurant_detail.restaurant_address }}</td>
+        </tr>
+        <tr>
+            <th>市区町村</th>
+            <td>{{ restaurant_detail.restaurant_city }}</td>
+        </tr>
+        <tr>
+            <th>エリア</th>
+            <td>{{ restaurant_detail.restaurant_city.city_area }}</td>
+        </tr>
+        <tr>
+            <th>ジャンル</th>
+            <td>{{ restaurant_detail.restaurant_genre }}</td>
+        </tr>
+        <tr>
+            <th>コメント</th>
+            <td>{{ restaurant_detail.restaurant_comment }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <h3>店舗画像</h3>
     <ul>
-    {% for menu in restaurant_detail.Menu.all %}
-        <li><span>{{ menu.menu_name_text }}</span><span><a href="{% url 'info_edit:menu_update' pk=menu.pk %}">情報変更</a></span></li>
-    {% endfor %}
+        {% for r_image in restaurant_detail.RestaurantImage.all %}
+            <li><img src="/images/{{ r_image.image }}" alt="{{ r_image.title }}">
+                <a href="{% url 'info_edit:user_image_delete' pk=r_image.pk %}">画像削除</a></li>
+        {% endfor %}
+    </ul>
+    <ul>
+        <li><a href="{% url 'info_edit:restaurant_update' pk=restaurant_detail.pk %}">店情報変更</a></li>
+        <li><a href="{% url 'info_edit:user_image_upload' %}">店舗画像アップロード</a></li>
+        <li><a href="{% url 'info_edit:menu_create2' r_pk=restaurant_detail.pk %}">メニュー追加</a></li>
+    </ul>
+    <ul>
+        {% for menu in restaurant_detail.Menu.all %}
+            <li><span>{{ menu.menu_name_text }}</span>
+                <span><a href="{% url 'info_edit:menu_detail' pk=menu.pk %}">詳細</a></span>
+                <span><a href="{% url 'info_edit:menu_update' pk=menu.pk %}">変更</a></span>
+                <span><a href="{% url 'info_edit:menu_delete' pk=menu.pk %}">削除</a></span></li>
+        {% endfor %}
 
     </ul>
 {% endblock %}

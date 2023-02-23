@@ -1,21 +1,11 @@
-<div>
-    <title>料理画像のアップロード</title>
+{% extends "register/base.html" %}
 
-    <form method="POST" enctype='multipart/form-data'>
-    {% csrf_token %}
-
-    <div>
-
-            タイトル<br>
-            {{ form.title }}<br><br>
-
-            画像<br>
-            {{ form.picture }}<br><br>
-
-            <button class="btn btn-primary" type="submit">アップロード</button>
-
-    </div>
-
+{% block content %}
+<title>料理画像アップロード</title>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">アップロード</button>
     </form>
 
-</div>
+{% endblock %}

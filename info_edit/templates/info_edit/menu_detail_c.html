@@ -1,0 +1,33 @@
+{% extends "info_edit/login_base.html" %}
+{% block content %}
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>料理名</th>
+            <td>{{ menu_detail.menu_name_text }}</td>
+        </tr>
+        <tr>
+            <th>価格</th>
+            <td>{{ menu_detail.menu_price }}</td>
+        </tr>
+        <tr>
+            <th>コメント</th>
+            <td>{{ menu_detail.menu_comment_text }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <h3>料理画像</h3>
+    {% for m_image in menu_detail.MenuImage.all %}
+        <img src="/images/{{ m_image.image }}" alt="{{ m_image.title }}">
+    {% endfor %}
+    <ul>
+    <li><a href="{% url 'info_edit:menu_image_upload' menu_pk=object.pk %}">料理画像追加</a></li>
+    <li><a href="{% url 'info_edit:menu_update' pk=object.pk %}">メニュー情報変更</a></li>
+    </ul>
+    <ul>
+        {% for menu in menu_detail.Menu.all %}
+            <li><span>{{ menu.menu_name_text }}</span><span><a
+                    href="{% url 'info_edit:menu_update' pk=menu.pk %}">情報変更</a></span></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

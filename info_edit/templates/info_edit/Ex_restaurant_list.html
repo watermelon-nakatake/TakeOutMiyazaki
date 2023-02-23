@@ -1,0 +1,21 @@
+{% extends "register/base.html" %}
+
+{% block content %}
+<h2>店舗一覧</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>店舗名</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for restaurant in restaurant_list %}
+    <tr>
+      <td>{{ restaurant.restaurant_name_text }}</td>
+      <td><a href="../detail/{{ restaurant.pk }}">詳細</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

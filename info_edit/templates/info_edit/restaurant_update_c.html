@@ -1,0 +1,20 @@
+{% extends "info_edit/login_base.html" %}
+{% block content %}
+    <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" class='btn btn-primary' value="登録">
+  </form>
+    <ul>
+        <li><a href="{% url 'info_edit:user_edit_main' %}">店情報変更</a></li>
+        <li><a href="{% url 'info_edit:user_image_upload' %}">店画像アップロード</a></li>
+        <li><a href="{% url 'info_edit:menu_create2' r_pk=restaurant_detail.pk %}">メニュー追加</a></li>
+    </ul>
+    <ul>
+        {% for menu in restaurant_detail.Menu.all %}
+            <li><span>{{ menu.menu_name_text }}</span><span><a
+                    href="{% url 'info_edit:menu_update' pk=menu.pk %}">情報変更</a></span></li>
+        {% endfor %}
+
+    </ul>
+{% endblock %}

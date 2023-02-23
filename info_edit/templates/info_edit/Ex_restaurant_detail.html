@@ -1,0 +1,40 @@
+{% extends "register/base.html" %}
+
+{% block content %}
+    <h2>店舗情報</h2>
+    <div class="jumbotron">
+        <table class="table">
+            <tbody>
+            <tr>
+                <td>店舗名</td>
+                <td>{{ restaurant_data.restaurant_name_text }}</td>
+            </tr>
+            <tr>
+                <td>ジャンル</td>
+                <td>{{ restaurant_data.restaurant_genre }}</td>
+            </tr>
+            <tr>
+                <td>所在地</td>
+                <td>{{ restaurant_data.restaurant_address }}</td>
+            </tr>
+            <tr>
+                <td>エリア</td>
+                <td>{{ restaurant_data.restaurant_city.city_area }}</td>
+            </tr>
+            <tbody>
+        </table>
+
+
+        <h2>メニュー</h2>
+        <table class="table">
+            <tbody>
+            {% for menu in restaurant_data.Menu.all %}
+                <tr>
+                    <td>{{ menu.menu_name_text }}</td>
+                    <td>{{ menu.menu_price }}</td>
+                    <td><a href="{% url 'info_edit:ex_menu_detail' pk=menu.pk %}">詳細</a></td>
+                </tr>
+            {% endfor %}
+            <tbody>
+        </table>
+{% endblock %}

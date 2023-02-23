@@ -2,10 +2,33 @@
 {% block content %}
     <h1>メニュー新規登録画面 {{ this_restaurant.restaurant_name_text }}</h1>
 <form action="" method="POST">
+{% csrf_token %}
+{{ form.as_p }}
 
-{{ form.this_restaurant_name_text }}
+
 
 
 <input type="submit" value="送信">
 </form>
+    <ul>
+        {% for menu_data in this_menu %}
+            <li>{{ menu_data }}</li>
+        {% endfor %}
+    </ul>
+
+    <ul>
+        {% for con in context %}
+            <li>{{ con }}</li>
+        {% endfor %}
+    </ul>
+
+    {{ ins_txt }}
+    {{ pk }}
+
+    <ul>
+        {% for f_data in form %}
+            <li>{{ f_data }}</li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}

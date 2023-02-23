@@ -35,12 +35,12 @@
         {% for r_image in restaurant.RestaurantImage.all %}
             <tr>
             <th>{{ r_image.title }}</th>
-            <td><img src="/images/{{ r_image.image }}"></td>
+            <td><img src="/images/{{ r_image.image }}" alt="{{ r_image.title }}"></td>
             </tr>
         {% endfor %}
 		</tbody>
 	</table>
-    <a href="{% url 'info_edit:user_edit_main' %}">店情報変更</a>
+    <a href="{% url 'info_edit:restaurant_update' pk=restaurant.pk %}">店情報変更</a>
     <a href="{% url 'info_edit:menu_create' %}">メニュー追加</a>
     <ul>
     {% for menu in menu_list.all %}

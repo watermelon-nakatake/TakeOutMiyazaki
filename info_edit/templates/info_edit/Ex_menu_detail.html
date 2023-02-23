@@ -1,0 +1,29 @@
+{% extends "register/base.html" %}
+
+{% block content %}
+    <h2>メニュー情報</h2>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <td>料理名</td>
+            <td>{{ menu_data.menu_name_text }}</td>
+        </tr>
+        <tr>
+            <td>価格</td>
+            <td>{{ menu_data.menu_price }}</td>
+        </tr>
+        <tr>
+            <td>コメント</td>
+            <td>{{ menu_data.menu_comment_text }}</td>
+        </tr>
+        <tr>
+            <td>画像</td>
+            <td>
+                {% for image in menu_data.MenuImage.all %}
+                    <img src="/images/{{ image.image }}" alt="{{ image.title }}">
+                {% endfor %}
+            </td>
+        <tbody>
+    </table>
+{% endblock %}
