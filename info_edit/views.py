@@ -295,21 +295,20 @@ class RestaurantImageUploadView(LoginRequiredMixin, generic.CreateView):
                 i.write(chunk)
         # サイズ調整
         img = Image.open(save_path)
-        # if img.size[0] / 4 * 3 >= img.size[1]:
-        #     re_img = img.resize((640, int(640 * img.size[1] / img.size[0])))
-        # else:
-        #     re_img = img.resize((int(480 * img.size[0] / img.size[1]), 480))
-        re_img = img.resize((640, 480), Image.BOX)
+        if img.size[0] / 4 * 3 >= img.size[1]:
+            re_img = img.resize((640, int(640 * img.size[1] / img.size[0])))
+        else:
+            re_img = img.resize((int(480 * img.size[0] / img.size[1]), 480))
         # I/Oデータ取り出し
         img_io = io.BytesIO()
         re_img.save(img_io, format="JPEG")
         io_image = InMemoryUploadedFile(img_io, field_name=None, name=save_path, charset=None,
                                         content_type="image/jpeg", size=img_io.getbuffer().nbytes)
         post = form.save(commit=False)
-        post.picture = io_image
+        post.image = io_image
         post.sub_restaurant = Restaurant.objects.get(user=self.request.user)
         post.save()
-        # os.remove(save_path)
+        os.remove(save_path)
         return super().form_valid(form)
 
 
@@ -340,7 +339,7 @@ class MenuImageUploadView(LoginRequiredMixin, generic.CreateView):
         io_image = InMemoryUploadedFile(img_io, field_name=None, name=save_path, charset=None,
                                         content_type="image/jpeg", size=img_io.getbuffer().nbytes)
         post = form.save(commit=False)
-        post.picture = io_image
+        post.image = io_image
         post.sub_menu = RestaurantMenu.objects.get(pk=self.kwargs['menu_pk'])
         post.save()
         os.remove(save_path)
@@ -376,3 +375,4 @@ class ExMenuDetailView(generic.DetailView):
 
 
 # todo: UserPassesTestMixinクラスでやってみる
+# todo: imageUploadのform_validをまとめる
