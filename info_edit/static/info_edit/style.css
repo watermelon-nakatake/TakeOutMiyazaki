@@ -35,3 +35,13 @@
 .restaurant_data_base{
     margin-bottom: 10px;
 }
+
+.image_box {
+    width: 100%;
+}
+.image_box img {
+    width: 320px;
+    height: 240px;
+    float: left;
+    margin-left: 5px;
+}

@@ -281,8 +281,11 @@ class RestaurantImageUploadView(LoginRequiredMixin, generic.CreateView):
     model = RestaurantImage
     template_name = 'info_edit/restaurant_image_upload.html'
     # form_class = RestaurantImageUploadForm
-    success_url = '/user/top/'
     fields = ('title', 'image')
+
+    def get_success_url(self):
+        return reverse('info_edit:restaurant_detail_u',
+                       kwargs={'pk': Restaurant.objects.get(user=self.request.user).pk})
 
     def form_valid(self, form):
         save_path = "up_images/temporary/" + str(self.request.FILES['image'])
@@ -292,10 +295,11 @@ class RestaurantImageUploadView(LoginRequiredMixin, generic.CreateView):
                 i.write(chunk)
         # サイズ調整
         img = Image.open(save_path)
-        if img.size[0] / 4 * 3 >= img.size[1]:
-            re_img = img.resize((640, int(640 * img.size[1] / img.size[0])))
-        else:
-            re_img = img.resize((int(480 * img.size[0] / img.size[1]), 480))
+        # if img.size[0] / 4 * 3 >= img.size[1]:
+        #     re_img = img.resize((640, int(640 * img.size[1] / img.size[0])))
+        # else:
+        #     re_img = img.resize((int(480 * img.size[0] / img.size[1]), 480))
+        re_img = img.resize((640, 480), Image.BOX)
         # I/Oデータ取り出し
         img_io = io.BytesIO()
         re_img.save(img_io, format="JPEG")
@@ -305,7 +309,7 @@ class RestaurantImageUploadView(LoginRequiredMixin, generic.CreateView):
         post.picture = io_image
         post.sub_restaurant = Restaurant.objects.get(user=self.request.user)
         post.save()
-        os.remove(save_path)
+        # os.remove(save_path)
         return super().form_valid(form)
 
 
@@ -314,7 +318,11 @@ class MenuImageUploadView(LoginRequiredMixin, generic.CreateView):
     template_name = 'info_edit/menu_image_upload.html'
     fields = ('title', 'image')
 
-    def form_valid(self, form):
+    def get_success_url(self):
+        return reverse('info_edit:restaurant_detail_u',
+                       kwargs={'pk': Restaurant.objects.get(user=self.request.user).pk})
+
+    def form_valid(self, form, **kwargs):
         save_path = "up_images/temporary/" + str(self.request.FILES['image'])
         up_data = self.request.FILES['image']
         with open(save_path, 'wb+') as i:
@@ -333,7 +341,7 @@ class MenuImageUploadView(LoginRequiredMixin, generic.CreateView):
                                         content_type="image/jpeg", size=img_io.getbuffer().nbytes)
         post = form.save(commit=False)
         post.picture = io_image
-        post.sub_menu = RestaurantMenu.objects.get(pk=self.kwargs['pk'])
+        post.sub_menu = RestaurantMenu.objects.get(pk=self.kwargs['menu_pk'])
         post.save()
         os.remove(save_path)
         return super().form_valid(form)

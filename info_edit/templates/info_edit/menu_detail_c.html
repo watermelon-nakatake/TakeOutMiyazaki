@@ -17,9 +17,11 @@
         </tbody>
     </table>
     <h3>料理画像</h3>
+    <div class="image_box">
     {% for m_image in menu_detail.MenuImage.all %}
         <img src="/images/{{ m_image.image }}" alt="{{ m_image.title }}">
     {% endfor %}
+    </div>
     <ul>
     <li><a href="{% url 'info_edit:menu_image_upload' menu_pk=object.pk %}">料理画像追加</a></li>
     <li><a href="{% url 'info_edit:menu_update' pk=object.pk %}">メニュー情報変更</a></li>
